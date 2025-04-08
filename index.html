@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sound Watch - Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+
+<!-- ========== Navbar ========== -->
+<header class="navbar">
+    <div class="container">
+        <a href="index.html" class="logo">
+            <img src="assets/images/IMG_20250331_114718.jpg" alt="Sound Watch Logo" class="logo-img">
+           
+        </a>
+        <nav class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="product.html"><i class="fas fa-box"></i> Products</a>
+            <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a>
+            <a href="checkout.html"><i class="fas fa-credit-card"></i> Checkout</a>
+        </nav>
+        <div class="search-container">
+            <input type="text" placeholder="Search..." id="search-bar" />
+            <i class="fas fa-search search-icon"></i>
+        </div>
+    </div>
+</header>
+
+
+<!-- ========== Demo Video Section ========== -->
+<div class="video-container">
+    <video class="demo-video" controls autoplay loop muted>
+        <source src="assets/demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<!-- ========== JS ========== -->
+<script src="js/scripts.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<div class="container text-center mt-5">
+    <i class="fas fa-check-circle text-success fa-3x"></i>
+    <h2 class="mt-3">Order Confirmed!</h2>
+    <p>Thank you for your purchase. Your order will be delivered soon.</p>
+
+    <h4>Order Summary</h4>
+    <div class="order-summary">
+        <p><strong>Total Items:</strong> <span id="summary-items"></span></p>
+        <p><strong>Total Amount:</strong> ₹<span id="summary-total"></span></p>
+    </div>
+
+    <h4 class="mt-4">Ordered Products</h4>
+    <div id="ordered-items"></div>
+
+    <a href="index.html" class="btn btn-primary mt-3">Continue Shopping</a>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    let orderDetails = JSON.parse(localStorage.getItem('orderDetails')) || {};
+    let totalItems = orderDetails.totalItems || 0;
+    let totalAmount = orderDetails.totalAmount || '0.00';
+
+    document.getElementById('summary-items').textContent = totalItems;
+    document.getElementById('summary-total').textContent = totalAmount;
+
+    const orderedItemsContainer = document.getElementById('ordered-items');
+    orderedItemsContainer.innerHTML = "";
+
+    if (orderDetails.items && orderDetails.items.length > 0) {
+        orderDetails.items.forEach(item => {
+            orderedItemsContainer.innerHTML += `
+                <div class="ordered-item mb-3">
+                    <img src="${item.image}" alt="${item.name}" style="width: 100px; height: 100px;">
+                    <p><strong>${item.name}</strong></p>
+                    <p>Quantity: ${item.quantity}</p>
+                    <p>Price: ₹${(item.price * item.quantity).toFixed(2)}</p>
+                    <hr>
+                </div>
+            `;
+        });
+    } else {
+        orderedItemsContainer.innerHTML = "<p>No items found.</p>";
+    }
+
+    // Clear order details after displaying them
+    localStorage.removeItem('orderDetails');
+});
+</script>
+
+</body>
+</html>

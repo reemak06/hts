@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Demo Store</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .order-summary {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            background: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .checkout-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .checkout-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+    !
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/IMG_20250331_114718.jpg" alt="Sound Watch Logo" class="logo-img">
+            </a>
+            <nav class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="product.html"><i class="fas fa-box"></i> Products</a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a>
+                <a href="checkout.html"><i class="fas fa-credit-card"></i> Checkout</a>
+            </nav>
+            <div class="search-container">
+                <input type="text" placeholder="Search..." id="search-bar" />
+                <i class="fas fa-search search-icon"></i>
+            </div>
+        </div>
+    </header>
+<div class="container checkout-container mt-5">
+    <h2>Checkout</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Order Summary</h4>
+            <div class="order-summary">
+                <div id="checkout-items"></div>
+                <p><strong>Total Items:</strong> <span id="checkout-total-items">0</span></p>
+                <p><strong>Total Amount:</strong> ₹<span id="checkout-total-amount">0.00</span></p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h4>Shipping Details</h4>
+            <form id="checkout-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" class="form-control" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea class="form-control" id="address" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" class="form-control" id="phone" required>
+                </div>
+                <h4>Payment Method</h4>
+                <div class="form-group">
+                    <select class="form-control" id="payment-method" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="upi">UPI</option>
+                        <option value="cod">Cash on Delivery</option>
+                    </select>
+                </div>
+                <div id="card-details" class="d-none">
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" class="form-control" id="card-number" placeholder="1234 5678 9101 1121">
+                    </div>
+                    <div class="form-group">
+                        <label for="card-expiry">Expiry Date</label>
+                        <input type="month" class="form-control" id="card-expiry">
+                    </div>
+                    <div class="form-group">
+                        <label for="card-cvv">CVV</label>
+                        <input type="text" class="form-control" id="card-cvv" placeholder="123">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Confirm Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadCheckout() {
+        const checkoutItemsContainer = document.getElementById("checkout-items");
+        const totalItems = document.getElementById("checkout-total-items");
+        const totalAmount = document.getElementById("checkout-total-amount");
+
+        checkoutItemsContainer.innerHTML = "";
+        let total = 0;
+        let itemCount = 0;
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        if (cart.length === 0) {
+            checkoutItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+            document.querySelector("form").style.display = "none";
+        } else {
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                itemCount += item.quantity;
+
+                checkoutItemsContainer.innerHTML += `
+                    <div class="checkout-item">
+                        <p><strong>${item.name}</strong> - ₹${item.price.toFixed(2)} x ${item.quantity} = ₹${itemTotal.toFixed(2)}</p>
+                    </div>
+                `;
+            });
+        }
+
+        totalItems.textContent = itemCount;
+        totalAmount.textContent = total.toFixed(2);
+    }
+
+    document.getElementById("payment-method").addEventListener("change", function() {
+        const cardDetails = document.getElementById("card-details");
+        if (this.value === "card") {
+            cardDetails.classList.remove("d-none");
+        } else {
+            cardDetails.classList.add("d-none");
+        }
+    });
+
+    document.getElementById("checkout-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const address = document.getElementById("address").value;
+        const phone = document.getElementById("phone").value;
+        const paymentMethod = document.getElementById("payment-method").value;
+
+        if (!name || !email || !address || !phone || !paymentMethod) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        const orderDetails = {
+            name, email, address, phone, paymentMethod,
+            items: JSON.parse(localStorage.getItem("cart")) || [],
+            totalItems: document.getElementById("checkout-total-items").textContent,
+            totalAmount: document.getElementById("checkout-total-amount").textContent
+        };
+
+        localStorage.setItem("orderDetails", JSON.stringify(orderDetails));
+        localStorage.removeItem("cart");
+
+        window.location.href = "confirmation.html";
+    });
+
+    document.addEventListener("DOMContentLoaded", loadCheckout);
+</script>
+
+</body>
+</html>

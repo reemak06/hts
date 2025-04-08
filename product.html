@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product - Sound Watch</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+</head>
+<body>
+
+<!-- ================= Header ================= -->
+<header class="navbar">
+    <div class="container">
+        <a href="index.html" class="logo">
+            <img src="assets/images/IMG_20250331_114718.jpg" alt="Sound Watch Logo" class="logo-img">
+        </a>
+        <nav class="nav-links">
+            <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            <a href="product.html"><i class="fas fa-box"></i> Products</a>
+            <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a>
+            <a href="checkout.html"><i class="fas fa-credit-card"></i> Checkout</a>
+        </nav>
+        <div class="search-container">
+            <input type="text" placeholder="Search..." id="search-bar" />
+            <i class="fas fa-search search-icon"></i>
+        </div>
+    </div>
+</header>
+
+<!-- ================= Product Section ================= -->
+<div class="container mt-5">
+    <h2 class="mb-4">Sound Watch Collection</h2>
+
+    <!-- Product 1 -->
+    <div class="row product-section">
+        <div class="col-md-6">
+            <div class="product-gallery">
+                <button class="prev-btn" onclick="prevImage('product1')">&#10094;</button>
+                <img src="assets/images/product1.jpg" alt="Sound Watch Classic" class="product-image" id="product1-mainImage">
+                <button class="next-btn" onclick="nextImage('product1')">&#10095;</button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="product-title">Sound Watch (Classic)</h3>
+            <p class="product-description">
+                An innovative sound recognition watch designed for the deaf and mute, featuring real-time alerts and smart notifications.
+            </p>
+            <p class="product-price">₹9,999.00</p>
+            <div class="quantity-control">
+                <input type="number" value="1" min="1" max="10" id="quantity1">
+                <button class="btn" onclick="addToCart('Sound Watch (Classic)', 9999.00, 'quantity1')">
+                    <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="row product-section mt-5">
+        <div class="col-md-6">
+            <div class="product-gallery">
+                <button class="prev-btn" onclick="prevImage('product2')">&#10094;</button>
+                <img src="assets/images/product4.jpg" alt="Sound Watch Limited Edition" class="product-image" id="product2-mainImage">
+                <button class="next-btn" onclick="nextImage('product2')">&#10095;</button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="product-title">Sound Watch (Limited Edition)</h3>
+            <p class="product-description">
+                A stylish upgrade of the Sound Watch, available in multiple designs with the same smart sound recognition features.
+            </p>
+            <p class="product-price">₹11,499.00</p>
+            <div class="quantity-control">
+                <input type="number" value="1" min="1" max="10" id="quantity2">
+                <button class="btn" onclick="addToCart('Sound Watch (Limited Edition)', 11499.00, 'quantity2')">
+                    <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= Footer ================= -->
+<footer class="footer">
+    &copy; 2025 Sound Watch. All Rights Reserved.
+</footer>
+
+<!-- ================= JavaScript ================= -->
+<script>
+    let images = {
+        product1: [
+            "assets/images/product1.jpg",
+            "assets/images/product2.jpg",
+            "assets/images/product3.jpg"
+        ],
+        product2: [
+            "assets/images/product4.jpg",
+            "assets/images/product5.jpg",
+            "assets/images/product6.jpg"
+        ]
+    };
+
+    let currentIndex = { product1: 0, product2: 0 };
+
+    function prevImage(product) {
+        if (!images[product]) return;
+        currentIndex[product] = (currentIndex[product] === 0) ? images[product].length - 1 : currentIndex[product] - 1;
+        document.getElementById(`${product}-mainImage`).src = images[product][currentIndex[product]];
+    }
+
+    function nextImage(product) {
+        if (!images[product]) return;
+        currentIndex[product] = (currentIndex[product] === images[product].length - 1) ? 0 : currentIndex[product] + 1;
+        document.getElementById(`${product}-mainImage`).src = images[product][currentIndex[product]];
+    }
+
+    function addToCart(name, price, quantityId) {
+        let quantity = document.getElementById(quantityId).value;
+        if (quantity < 1) {
+            alert("Please select at least 1 item.");
+            return;
+        }
+
+        let cartCount = document.getElementById("cart-count");
+        cartCount.innerText = parseInt(cartCount.innerText) + parseInt(quantity);
+
+        alert(`${name} (x${quantity}) added to cart!`);
+    }
+</script>
+<script src="js/products.js"></script>
+<script src="js/scripts.js"></script>
+
+</body>
+</html>
